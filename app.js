@@ -1,3 +1,4 @@
+
 // first creating two arrays one for the game sequence and other for the user sequence 
 let gameseq=[];
 let userseq=[];
@@ -11,17 +12,15 @@ let level=0;
 let h2=document.querySelector("h2");
 
 
-// if any key is pressed out of 4 coloued keys then the game has started 
-document.addEventListener("click" , function(){
+// if any key is pressed out of 4 coloured keys then the game has started 
+document.addEventListener("keypress" , function(){
 
     // only one time the game will start
     if(started==false){
         console.log("game has started");
         started=true;
-
+        levelup();
     }
-
-   levelup();
    
 })
 
@@ -33,7 +32,7 @@ function gameflash(btn){
     // removing the button colour so it appears like it flashed
     setTimeout( function(){
         btn.classList.remove("flash");
-    } , 250) // means the white backgrounf colour will get removed in 1 sec 
+    } , 250)
 
 }
 
@@ -44,7 +43,7 @@ function userflash(btn){
     // removing the button colour so it appears like it flashed
     setTimeout( function(){
         btn.classList.remove("userflash");
-    } , 250) // means the white backgrounf colour will get removed in 1 sec 
+    } , 250)
 
 }
 
@@ -52,20 +51,21 @@ function userflash(btn){
 // now level up and flash the random button out of all four buttons 
 
 function levelup(){
+
+    userseq=[]; // resetting user sequence for the next level so that you have to remember the whole sequence
+
     level++;
 
-    //  after pressinf any bitton we will find the level at the h2 heading 
+    // after pressing any button we will find the level at the h2 heading 
     h2.innerText=`Level ${level}`;
 
     // now on pressing the button the button will flash
     // random button will be chosen
-    let ranidx=Math.floor(Math.random()*3);
+    let ranidx=Math.floor(Math.random()*4);
     let randcolor=btns[ranidx];
+
     // creating class from the colour and then choosing the button
     let randbtn=document.querySelector(`.${randcolor}`);
-   /*  console.log(ranidx);
-    console.log(randcolor);
-    console.log(randbtn); */
 
     gameseq.push(randcolor);
     console.log(gameseq);
@@ -75,32 +75,56 @@ function levelup(){
 }
 
 // match the user sequence with the game sequence 
-function checkans(){
-    //console.log("curr Level:", level);
-    let idx=level-1;
+function checkans(idx){
 
     if(userseq[idx]=== gameseq[idx]){
-        console.log("same value");
+       
+
+        // checking if the complete sequence is correct
+        if(userseq.length==gameseq.length){
+            setTimeout(levelup,1000);
+        }
     }
     else{
-          h2.innerText=`Game over! press any key to start`;
+        h2.innerText=`Game over! Your score was ${level}`;
+        document.querySelector("body").style.backgroundColor="red";
+        setTimeout(function(){
+            document.querySelector("body").style.backgroundColor="white";
+
+        }, 150);
+        reset();
 
     }
 }
 
 // creating a btn press function
 function btnpress(){
+
+    if(started==false){
+        return;
+    }
+
     let btn=this;
 
-    // the bn we have pressed have to flash
+    // the btn we have pressed have to flash
     userflash(btn);
 
-    usercolour=btn.getAttribute("id");
+    let usercolour=btn.getAttribute("id");
     userseq.push(usercolour);
+
+    // checking the answer
+    checkans(userseq.length-1);  // checking for the last index 
 }
 
 let allbtns=document.querySelectorAll(".btn");
 
-for( btn of allbtns){
+for(let btn of allbtns){
     btn.addEventListener("click", btnpress)
+}
+
+function reset(){
+    started=false;
+    userseq=[];
+    gameseq=[];
+    level=0;
 }
