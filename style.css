@@ -6,8 +6,24 @@ body{
     width:200px;
     border-radius: 20%;
     border:10px solid black;
+    margin: 2.5rem;
 }
 .btn-cont{
     display: flex;
     justify-content: center;
+}
+.yellow{
+    background-color: yellow;
+}
+
+.red{
+    background-color: red;
+}
+
+.purple{
+    background-color: purple;
+}
+
+.green{
+    background-color: green;
 }
