@@ -27,3 +27,10 @@ body{
 .green{
     background-color: green;
 }
+
+.flash{
+    background-color: white;
+}
+.userflash{
+    background-color: black;
+}
